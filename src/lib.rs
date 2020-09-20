@@ -21,12 +21,35 @@ impl<T> Stack<T> {
     }
 }
 
+use std::collections::LinkedList;
+
+pub struct Queue {
+    data: LinkedList<i32>,
+}
+
+#[allow(dead_code)]
+impl Queue {
+    fn new() -> Self {
+        Queue {
+            data: LinkedList::new(),
+        }
+    }
+
+    fn enqueue(&mut self, item: i32) {
+        &self.data.push_back(item);
+    }
+
+    fn dequeue(&mut self) -> Option<i32> {
+        self.data.pop_front()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test_push() {
+    fn test_stack_push() {
         let mut stack = Stack::new();
         stack.push(1);
         assert_eq!(stack.peek(), Some(&1));
@@ -35,10 +58,25 @@ mod tests {
     }
 
     #[test]
-    fn test_pop() {
+    fn test_stack_pop() {
         let mut stack = Stack::new();
         stack.push(5);
         assert_eq!(stack.pop(), Some(5));
         assert_eq!(stack.pop(), None);
+    }
+
+    #[test]
+    fn test_queue() {
+        let mut q = Queue::new();
+        for i in 1..11 {
+            q.enqueue(i);
+        }
+        for j in 1..12 {
+            if j <= 10 {
+                assert_eq!(q.dequeue(), Some(j));
+            } else {
+                assert_eq!(q.dequeue(), None);
+            }
+        }
     }
 }
